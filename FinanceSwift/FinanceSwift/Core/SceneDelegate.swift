@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import IQKeyboardManagerSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -25,10 +24,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
-        
-        IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.resignOnTouchOutside = true
-        IQKeyboardManager.shared.enableAutoToolbar = true
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

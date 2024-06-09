@@ -41,7 +41,7 @@ class FinancialRatiosViewController: UIViewController {
         let b = UIButton()
         b.layer.cornerRadius = 6
         b.layer.masksToBounds = true
-        b.backgroundColor = .blue
+        b.backgroundColor = .red
         b.titleLabel?.textColor = .white
         b.setTitle("Next", for: .normal)
         return b
@@ -63,7 +63,7 @@ class FinancialRatiosViewController: UIViewController {
     func setupInterface(){
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "FinSwift"
+        title = "FinanceSwift"
         view.backgroundColor = .systemGray5
         view.addSubview(tableView)
         view.addSubview(footerButton)
@@ -83,7 +83,7 @@ class FinancialRatiosViewController: UIViewController {
             tableView.leftAnchor.constraint(equalTo:  view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo:  view.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: footerButton.topAnchor),
-//            footerButton.topAnchor.constraint(equalTo: tableView.bottomAnchor,constant: 8),
+            //            footerButton.topAnchor.constraint(equalTo: tableView.bottomAnchor,constant: 8),
             footerButton.heightAnchor.constraint(equalToConstant: 45),
             footerButton.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             footerButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
@@ -97,16 +97,16 @@ class FinancialRatiosViewController: UIViewController {
 extension FinancialRatiosViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return Section.allCases.count
+        return FinancialRatiosSection.allCases.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Section.allCases[section].children.count
+        return FinancialRatiosSection.allCases[section].children.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let section = Section.allCases[indexPath.section]
+        let section = FinancialRatiosSection.allCases[indexPath.section]
         let item = section.children[indexPath.row]
         
         switch section {
@@ -114,8 +114,8 @@ extension FinancialRatiosViewController: UITableViewDelegate, UITableViewDataSou
         case .companyName, .FromFinancialPositionStatement, .FromIncomeStatement:
             let cell = tableView.dequeueReusableCell(withIdentifier: baiscFinancialRatiosTableViewCellIdentifier, for: indexPath) as! BaiscFinancialRatiosTableViewCell
             cell.nameLabel.text = item.title
-            cell.nameTextFeild.placeholder = item.title
-            cell.nameTextFeild.tag = indexPath.section * 100 + indexPath.row // Unique tag for each text field
+            cell.nameTextFeild.placeholder = item.id // item.id is the uniq id for each TextField
+//            cell.nameTextFeild.tag = item.id
             return cell
         case .financeYear:
             let cell = tableView.dequeueReusableCell(withIdentifier: datePickerTableViewCellIdentifier, for: indexPath) as! DatePickerTableViewCell
@@ -132,124 +132,128 @@ extension FinancialRatiosViewController: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return DefaultTableSectionHeader(title: Section.allCases[section].title)
+        return DefaultTableSectionHeader(title: FinancialRatiosSection.allCases[section].title)
     }
     
     // FIXME: add a button as section Footer ?
     
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        switch Section.allCases[section] {
-//
-//        case .companyName, .FromFinancialPositionStatement, .financeYear:
-//            return nil
-//        case .FromIncomeStatement:
-//            return DefaultTableSectionFooter(title: "Next")
-//        }
-//    }
+    //    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    //        switch Section.allCases[section] {
+    //
+    //        case .companyName, .FromFinancialPositionStatement, .financeYear:
+    //            return nil
+    //        case .FromIncomeStatement:
+    //            return DefaultTableSectionFooter(title: "Next")
+    //        }
+    //    }
     
 }
 // MARK: - TextField Delelgate
 extension FinancialRatiosViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-              
-              let tag = textField.tag
-              let section = tag / 100
-              let row = tag % 100
-              
-              let sectionType = Section.allCases[section]
-              let itemType = sectionType.children[row]
-              
-              if let text = textField.text, !text.isEmpty {
-                  switch itemType {
-                  case .companyName:
-                      companyFinanceStatment.companyName = text
-                  case .financeYear:
-                      if let year = Int(text) {
-                          companyFinanceStatment.financeStatmentYear = year
-                      }
-                  case .totalAssets:
-                      if let value = Int(text) {
-                          companyFinanceStatment.totalAssets = value
-                      }
-                  case .propertyRights:
-                      if let value = Int(text) {
-                          companyFinanceStatment.propertyRights = value
-                      }
-                  case .currentAssets:
-                      if let value = Int(text) {
-                          companyFinanceStatment.currentAssets = value
-                      }
-                  case .nonCurrentAssets:
-                      if let value = Int(text) {
-                          companyFinanceStatment.nonCurrentAssets = value
-                      }
-                  case .currentLiabilities:
-                      if let value = Int(text) {
-                          companyFinanceStatment.currentLiabilities = value
-                      }
-                  case .inventory:
-                      if let value = Int(text) {
-                          companyFinanceStatment.inventory = value
-                      }
-                  case .cash:
-                      if let value = Int(text) {
-                          companyFinanceStatment.cash = value
-                      }
-                  case .longTermLoans:
-                      if let value = Int(text) {
-                          companyFinanceStatment.longTermLoans = value
-                      }
-                  case .shortTermLoans:
-                      if let value = Int(text) {
-                          companyFinanceStatment.shortTermLoans = value
-                      }
-                  case .accountsReceivable:
-                      if let value = Int(text) {
-                          companyFinanceStatment.accountsReceivable = value
-                      }
-                  case .payables:
-                      if let value = Int(text) {
-                          companyFinanceStatment.payables = value
-                      }
-                  case .sales:
-                      if let value = Int(text) {
-                          companyFinanceStatment.sales = value
-                      }
-                  case .operatingProfit:
-                      if let value = Int(text) {
-                          companyFinanceStatment.operatingProfit = value
-                      }
-                  case .grossProfit:
-                      if let value = Int(text) {
-                          companyFinanceStatment.grossProfit = value
-                      }
-                  case .netProfit:
-                      if let value = Int(text) {
-                          companyFinanceStatment.netProfit = value
-                      }
-                  case .financingCosts:
-                      if let value = Int(text) {
-                          companyFinanceStatment.financingCosts = value
-                      }
-                  case .netProfitBeforeInterestAndTaxes:
-                      if let value = Int(text) {
-                          companyFinanceStatment.netProfitBeforeInterestAndTaxes = value
-                      }
-                  case .costOfSales:
-                      if let value = Int(text) {
-                          companyFinanceStatment.costOfSales = value
-                      }
-                  }
-              }
-              print(companyFinanceStatment)
-              return true
+        //        triggerTextField(textField)
+        return true
+    }
+    
+    func triggerTextField(textField: UITextField){
+        
+        let tag = textField.tag
+        let section = tag / 100
+        let row = tag % 100
+        
+        let sectionType = FinancialRatiosSection.allCases[section]
+        let itemType = sectionType.children[row]
+        
+        if let text = textField.text, !text.isEmpty {
+            switch itemType {
+            case .companyName:
+                companyFinanceStatment.companyName = text
+            case .financeYear:
+                if let year = Int(text) {
+                    companyFinanceStatment.financeStatmentYear = year
+                }
+            case .totalAssets:
+                if let value = Int(text) {
+                    companyFinanceStatment.totalAssets = value
+                }
+            case .propertyRights:
+                if let value = Int(text) {
+                    companyFinanceStatment.propertyRights = value
+                }
+            case .currentAssets:
+                if let value = Int(text) {
+                    companyFinanceStatment.currentAssets = value
+                }
+            case .nonCurrentAssets:
+                if let value = Int(text) {
+                    companyFinanceStatment.nonCurrentAssets = value
+                }
+            case .currentLiabilities:
+                if let value = Int(text) {
+                    companyFinanceStatment.currentLiabilities = value
+                }
+            case .inventory:
+                if let value = Int(text) {
+                    companyFinanceStatment.inventory = value
+                }
+            case .cash:
+                if let value = Int(text) {
+                    companyFinanceStatment.cash = value
+                }
+            case .longTermLoans:
+                if let value = Int(text) {
+                    companyFinanceStatment.longTermLoans = value
+                }
+            case .shortTermLoans:
+                if let value = Int(text) {
+                    companyFinanceStatment.shortTermLoans = value
+                }
+            case .accountsReceivable:
+                if let value = Int(text) {
+                    companyFinanceStatment.accountsReceivable = value
+                }
+            case .payables:
+                if let value = Int(text) {
+                    companyFinanceStatment.payables = value
+                }
+            case .sales:
+                if let value = Int(text) {
+                    companyFinanceStatment.sales = value
+                }
+            case .operatingProfit:
+                if let value = Int(text) {
+                    companyFinanceStatment.operatingProfit = value
+                }
+            case .grossProfit:
+                if let value = Int(text) {
+                    companyFinanceStatment.grossProfit = value
+                }
+            case .netProfit:
+                if let value = Int(text) {
+                    companyFinanceStatment.netProfit = value
+                }
+            case .financingCosts:
+                if let value = Int(text) {
+                    companyFinanceStatment.financingCosts = value
+                }
+            case .netProfitBeforeInterestAndTaxes:
+                if let value = Int(text) {
+                    companyFinanceStatment.netProfitBeforeInterestAndTaxes = value
+                }
+            case .costOfSales:
+                if let value = Int(text) {
+                    companyFinanceStatment.costOfSales = value
+                }
+            }
+        }
     }
 }
 
 // MARK: - Section
 
-private enum Section: CaseIterable {
+private enum FinancialRatiosSection: CaseIterable {
     case companyName,
          financeYear,
          FromFinancialPositionStatement,
