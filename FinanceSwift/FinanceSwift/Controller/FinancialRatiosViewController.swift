@@ -116,6 +116,69 @@ extension FinancialRatiosViewController: UITableViewDelegate, UITableViewDataSou
             cell.nameLabel.text = item.title
             cell.nameTextFeild.placeholder = item.id // item.id is the uniq id for each TextField
 //            cell.nameTextFeild.tag = item.id
+            switch item {
+                
+            case .companyName:
+                companyFinanceStatment.companyName = financeTextFieldData(.companyName, cell.nameTextFeild) as! String
+                
+            case .financeYear:
+                companyFinanceStatment.financeStatmentYear = financeTextFieldData(.financeYear, cell.nameTextFeild) as! Int
+                
+            case .totalAssets:
+                companyFinanceStatment.totalAssets = financeTextFieldData(.totalAssets, cell.nameTextFeild) as! Int
+                
+            case .propertyRights:
+                companyFinanceStatment.propertyRights = financeTextFieldData(.propertyRights, cell.nameTextFeild) as! Int
+                
+            case .currentAssets:
+                companyFinanceStatment.currentAssets = financeTextFieldData(.currentAssets, cell.nameTextFeild) as! Int
+                
+            case .nonCurrentAssets:
+                companyFinanceStatment.nonCurrentAssets = financeTextFieldData(.nonCurrentAssets, cell.nameTextFeild) as! Int
+                
+            case .currentLiabilities:
+                companyFinanceStatment.currentLiabilities = financeTextFieldData(.currentLiabilities, cell.nameTextFeild) as! Int
+                
+            case .inventory:
+                companyFinanceStatment.inventory = financeTextFieldData(.inventory, cell.nameTextFeild) as! Int
+                
+            case .cash:
+                companyFinanceStatment.cash = financeTextFieldData(.cash, cell.nameTextFeild) as! Int
+                
+            case .longTermLoans:
+                companyFinanceStatment.longTermLoans = financeTextFieldData(.longTermLoans, cell.nameTextFeild) as! Int
+                
+            case .shortTermLoans:
+                companyFinanceStatment.shortTermLoans = financeTextFieldData(.shortTermLoans, cell.nameTextFeild) as! Int
+                
+            case .accountsReceivable:
+                companyFinanceStatment.accountsReceivable = financeTextFieldData(.accountsReceivable, cell.nameTextFeild) as! Int
+                
+            case .payables:
+                companyFinanceStatment.payables = financeTextFieldData(.payables, cell.nameTextFeild) as! Int
+                
+            case .sales:
+                companyFinanceStatment.sales = financeTextFieldData(.sales, cell.nameTextFeild) as! Int
+                
+            case .operatingProfit:
+                companyFinanceStatment.operatingProfit = financeTextFieldData(.operatingProfit, cell.nameTextFeild) as! Int
+                
+            case .grossProfit:
+                companyFinanceStatment.grossProfit = financeTextFieldData(.grossProfit, cell.nameTextFeild) as! Int
+                
+            case .netProfit:
+                companyFinanceStatment.netProfit = financeTextFieldData(.netProfit, cell.nameTextFeild) as! Int
+                
+            case .financingCosts:
+                companyFinanceStatment.financingCosts = financeTextFieldData(.financingCosts, cell.nameTextFeild) as! Int
+                
+            case .netProfitBeforeInterestAndTaxes:
+                companyFinanceStatment.netProfitBeforeInterestAndTaxes = financeTextFieldData(.netProfitBeforeInterestAndTaxes, cell.nameTextFeild) as! Int
+                
+            case .costOfSales:
+                companyFinanceStatment.costOfSales = financeTextFieldData(.costOfSales, cell.nameTextFeild) as! Int
+            }
+
             return cell
         case .financeYear:
             let cell = tableView.dequeueReusableCell(withIdentifier: datePickerTableViewCellIdentifier, for: indexPath) as! DatePickerTableViewCell
@@ -133,6 +196,18 @@ extension FinancialRatiosViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return DefaultTableSectionHeader(title: FinancialRatiosSection.allCases[section].title)
+    }
+    
+    fileprivate func financeTextFieldData(_ item: FinancialRatiosSection.StatmentItem ,
+                                          _ textField: UITextField) -> Any {
+        if item.id == "companyName"  {
+            textField.keyboardType = .default
+            return textField.text ?? ""
+        } else {
+            textField.keyboardType = .numberPad
+            return Int(textField.text ?? "" ) ?? 0
+        }
+        
     }
     
     // FIXME: add a button as section Footer ?
